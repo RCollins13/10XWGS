@@ -56,6 +56,7 @@ def get_gemcode_regions(ibam, dist):
                            gem, len(gemcodes[gem]))
 
             gemcodes[gem] = [coords(read.reference_name, read.reference_start)]
+
         else:
             #Else just add read to preexisting dictionary 
             gemcodes[gem].append(coords(read.reference_name, read.reference_start))
@@ -64,4 +65,30 @@ def get_gemcode_regions(ibam, dist):
     for gem in gemcodes:
         yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
 
+#Run
+def main():
+    #Add arguments
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('ibam', type=pysam.AlignmentFile,
+                        help='Input bam')
+    parser.add_argument('outfile', help='Output bed file')
+    parser.add_argument('-d', '--dist', type=int, default=50000,
+                        help='Molecule partitioning distance in bp (default: 50000)')
+    args = parser.parse_args()
 
+    #Open outfile
+    fout = open(args.outfile, 'w')
+
+    #Get gemcode regions
+    for bed in get_gemcode_regions(ibam, dist):
+        #Turn molecule object into string
+        bed_str = '%s\t%s\t%s\t%s\t%s' % bed.chr, bed.start, bed.end, bed.barcode, bed.readcount
+
+        #Write to file
+        fout.write(bed_str + '\n')
+
+    #Close outfile
+    f.close()
+
+if __name__ = '__main__':
+    main()
