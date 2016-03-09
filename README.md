@@ -1,5 +1,5 @@
 # 10XWGS
-Miscellaneous command-line utilities for processing and analyzing 10X linked-read WGS data
+Command-line utilities for processing and analyzing 10X linked-read WGS data
 
 **Contact:** Ryan Collins (rcollins@chgr.mgh.harvard.edu)
 
