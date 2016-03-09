@@ -8,6 +8,7 @@ Estimate original molecule sizes and coordinates from 10X linked-read WGS barcod
 """
 
 import argparse
+from subprocess import call
 from collections import defaultdict, Counter, namedtuple
 import pysam
 
@@ -86,6 +87,9 @@ def main():
 
     #Close outfile
     fout.close()
+
+    #Sort outfile by chromosome then start (system call)
+    call('sort -Vk1,1 -k2,2n -o ' + args.outfile + args.outfile)
 
 if __name__ == '__main__':
     main()
