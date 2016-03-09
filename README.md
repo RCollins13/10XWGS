@@ -2,7 +2,6 @@
 Miscellaneous command-line utilities for processing and analyzing 10X linked-read WGS data
 
 **Contact:** Ryan Collins (rcollins@chgr.mgh.harvard.edu)
-
 All code copyright (c) 2016 Ryan Collins and is distributed under terms of the MIT license
 
 ## getMolecules.py
