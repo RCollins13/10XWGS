@@ -85,7 +85,7 @@ def main():
         fout.write(bed_str + '\n')
 
     #Close outfile
-    f.close()
+    fout.close()
 
 if __name__ == '__main__':
     main()
