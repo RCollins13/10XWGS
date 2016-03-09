@@ -8,8 +8,8 @@ Estimate original molecule sizes and coordinates from 10X linked-read WGS barcod
 """
 
 import argparse
-from subprocess import call
 from collections import defaultdict, Counter, namedtuple
+from subprocess import call
 import pysam
 
 def get_gemcode_regions(ibam, dist):
@@ -61,9 +61,10 @@ def get_gemcode_regions(ibam, dist):
 
     #Write out all remaining molecules at end of bam
     for gem in gemcodes:
-        yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
+        yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), 
+                       max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
 
-#Run
+#Run function
 def main():
     #Add arguments
     parser = argparse.ArgumentParser(description=__doc__)
@@ -80,7 +81,8 @@ def main():
     #Get gemcode regions
     for bed in get_gemcode_regions(args.ibam, args.dist):
         #Turn molecule object into string
-        bed_str = '{0}\t{1}\t{2}\t{3}\t{4}'.format(bed.chr, bed.start, bed.end, bed.barcode, bed.readcount)
+        bed_str = '{0}\t{1}\t{2}\t{3}\t{4}'.format(bed.chr, bed.start, bed.end,
+                                                   bed.barcode, bed.readcount)
 
         #Write to file
         fout.write(bed_str + '\n')
@@ -88,8 +90,10 @@ def main():
     #Close outfile
     fout.close()
 
-    #Sort outfile by chromosome then start (system call)
-    call('sort -Vk1,1 -k2,2n -o ' + args.outfile + ' ' + args.outfile)
+    #Sort outfile by chr then start (system call)
+    call('sort -Vk1,1 -k2,2n -o ' + args.outfile + ' ' + args.outfile, shell=True)
 
+
+#Main block
 if __name__ == '__main__':
     main()
