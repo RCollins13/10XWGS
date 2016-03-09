@@ -2,6 +2,7 @@
 Miscellaneous command-line utilities for processing and analyzing 10X linked-read WGS data
 
 **Contact:** Ryan Collins (rcollins@chgr.mgh.harvard.edu)
+
 All code copyright (c) 2016 Ryan Collins and is distributed under terms of the MIT license
 
 ## getMolecules.py
@@ -21,5 +22,7 @@ optional arguments:
   -d DIST, --dist DIST  Molecule partitioning distance in bp (default: 50000)
 ```
 **Usage Notes:**
+
 ..*Input bam file must be coordinate-sorted and indexed.
+
 ..*"Parititioning distance" (option -d / --dist) is the maximum distance permitted between two colinear reads with matching RX tags before considering them to have arisen from independent molecules.
