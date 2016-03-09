@@ -49,13 +49,13 @@ def get_gemcode_regions(ibam, dist):
         #If the read is from a new contig, write out all molecules held in memory
         #then add read to emptied dictionary
         if read.reference_name != current_chr:
-
-            for gem in gemcodes:
             
-                yield molecule(gemcodes[gem][0].chr, min([pos for chr,
-                               pos in gemcodes[gem]]), 
-                               max([pos for chr, pos in gemcodes[gem]]),
-                               gem, len(gemcodes[gem]))
+            for barcode in gemcodes:
+
+                yield molecule(gemcodes[barcode][0].chr, min([pos for chr,
+                               pos in gemcodes[barcode]]), 
+                               max([pos for chr, pos in gemcodes[barcode]]),
+                               barcode, len(gemcodes[barcode]))
 
             gemcodes = defaultdict(list)
             
@@ -80,11 +80,12 @@ def get_gemcode_regions(ibam, dist):
         current_chr = read.reference_name
 
     #Write out all remaining molecules at end of bam
-    for gem in gemcodes:
+    for barcode in gemcodes:
 
-        yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), 
-                       max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
-
+        yield molecule(gemcodes[barcode][0].chr, min([pos for chr,
+                       pos in gemcodes[barcode]]), 
+                       max([pos for chr, pos in gemcodes[barcode]]),
+                       barcode, len(gemcodes[barcode]))
 #Run function
 def main():
     #Add arguments
