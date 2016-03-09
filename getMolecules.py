@@ -29,9 +29,6 @@ def get_gemcode_regions(ibam, dist):
         chr, start, end, barcode, readcount
     """
 
-    #Open bamfile
-    bam = pysam.AlignmentFile(ibam)
-
     #Create namedtuples for storing read coordinate and molecule info
     coords = namedtuple('coords', ['chr', 'pos'])
     molecule = namedtuple('molecule', ['chr', 'start', 'end', 'barcode', 'readcount'])
@@ -41,7 +38,7 @@ def get_gemcode_regions(ibam, dist):
     gemcodes = defaultdict(list)
 
     #Iterate over reads in bamfile
-    for read in bam:
+    for read in ibam:
         #Save 10X barcode for read as gem
         gem = read.get_tag('RX')
         #If barcode has been seen previously and new read is either from different
