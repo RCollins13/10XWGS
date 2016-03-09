@@ -23,6 +23,6 @@ optional arguments:
 ```
 **Usage Notes:**
 
-..*Input bam file must be coordinate-sorted and indexed.
+..* Input bam file must be coordinate-sorted and indexed.
 
-..*"Parititioning distance" (option -d / --dist) is the maximum distance permitted between two colinear reads with matching RX tags before considering them to have arisen from independent molecules.
+..* "Parititioning distance" (option -d / --dist) is the maximum distance permitted between two colinear reads with matching RX tags before considering them to have arisen from independent molecules.
