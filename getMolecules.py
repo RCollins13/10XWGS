@@ -50,18 +50,18 @@ def get_gemcode_regions(ibam, dist):
         if gem in gemcodes and (gemcodes[gem][-1].chr != read.reference_name or 
                                 read.reference_start - gemcodes[gem][-1].pos > dist):
 
-            yield molecule(gemcodes[gem][1].chr, 
+            yield molecule(gemcodes[gem][0].chr, 
                            min([pos for chr, pos in gemcodes[gem]]), 
                            max([pos for chr, pos in gemcodes[gem]]), 
                            gem, len(gemcodes[gem]))
 
-            gemcodes[gem] = coords(read.reference_name, read.reference_start)
+            gemcodes[gem] = [coords(read.reference_name, read.reference_start)]
         else:
             #Else just add read to preexisting dictionary 
             gemcodes[gem].append(coords(read.reference_name, read.reference_start))
 
     #Write out all remaining molecules at end of bam
     for gem in gemcodes:
-        yield molecule(gemcodes[gem][1].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
+        yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
 
 
