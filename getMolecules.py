@@ -79,7 +79,7 @@ def main():
     #Get gemcode regions
     for bed in get_gemcode_regions(args.ibam, args.dist):
         #Turn molecule object into string
-        bed_str = '%s\t%s\t%s\t%s\t%s' % bed.chr, bed.start, bed.end, bed.barcode, bed.readcount
+        bed_str = '{0}\t{1}\t{2}\t{3}\t{4}'.format(bed.chr, bed.start, bed.end, bed.barcode, bed.readcount)
 
         #Write to file
         fout.write(bed_str + '\n')
