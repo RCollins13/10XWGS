@@ -80,7 +80,7 @@ def main():
     fout = open(args.outfile, 'w')
 
     #Get gemcode regions
-    for bed in get_gemcode_regions(ibam, dist):
+    for bed in get_gemcode_regions(args.ibam, args.dist):
         #Turn molecule object into string
         bed_str = '%s\t%s\t%s\t%s\t%s' % bed.chr, bed.start, bed.end, bed.barcode, bed.readcount
 
