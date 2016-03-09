@@ -54,6 +54,8 @@ def get_gemcode_regions(ibam, dist):
                                pos in gemcodes[barcode]]), 
                                max([pos for chr, pos in gemcodes[barcode]]),
                                barcode, len(gemcodes[barcode]))
+
+            gemcodes = defaultdict(list)
             
             gemcodes[gem].append(coords(read.reference_name, read.reference_start))
         
