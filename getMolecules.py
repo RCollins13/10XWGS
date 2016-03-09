@@ -39,8 +39,7 @@ def get_gemcode_regions(ibam, dist):
     gemcodes = defaultdict(list)
 
     #Set current_chr as reference contig of first read
-    current_chr = next(ibam).reference_name
-    ibam.seek(0)
+    current_chr = None
 
     #Iterate over reads in bamfile
     for read in ibam:
@@ -48,7 +47,7 @@ def get_gemcode_regions(ibam, dist):
         gem = read.get_tag('RX')
         #If the read is from a new contig, write out all molecules held in memory
         #then add read to emptied dictionary
-        if read.reference_name != current_chr:
+        if read.reference_name != current_chr and current_chr is not None:
             for barcode in gemcodes:
                 yield molecule(gemcodes[barcode][0].chr, min([pos for chr,
                                pos in gemcodes[barcode]]), 
