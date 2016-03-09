@@ -38,15 +38,32 @@ def get_gemcode_regions(ibam, dist):
     #Key is gemcodes, value is coords namedtuple
     gemcodes = defaultdict(list)
 
+    #Set current_chr as reference contig of first read
+    current_chr = next(ibam).reference_name
+    ibam.seek(0)
+
     #Iterate over reads in bamfile
     for read in ibam:
-        #Save 10X barcode for read as gem
+        #Save 10X barcode as gem
         gem = read.get_tag('RX')
-        #If barcode has been seen previously and new read is either from different
-        #contig or is colinear but beyond dist, yield old barcode as interval
-        #before adding new read to list
-        if gem in gemcodes and (gemcodes[gem][-1].chr != read.reference_name or 
-                                read.reference_start - gemcodes[gem][-1].pos > dist):
+        #If the read is from a new contig, write out all molecules held in memory
+        #then add read to emptied dictionary
+        if read.reference_name != current_chr:
+
+            for gem in gemcodes:
+            
+                yield molecule(gemcodes[gem][0].chr, min([pos for chr,
+                               pos in gemcodes[gem]]), 
+                               max([pos for chr, pos in gemcodes[gem]]),
+                               gem, len(gemcodes[gem]))
+
+            gemcodes = defaultdict(list)
+            
+            gemcodes[gem].append(coords(read.reference_name, read.reference_start))
+        
+        #If barcode has been seen previously and new read is colinear but beyond 
+        #dist, yield old barcode as interval before adding new read to list
+        elif gem in gemcodes and read.reference_start - gemcodes[gem][-1].pos > dist):
 
             yield molecule(gemcodes[gem][0].chr, 
                            min([pos for chr, pos in gemcodes[gem]]), 
@@ -59,8 +76,12 @@ def get_gemcode_regions(ibam, dist):
             #Else just add read to preexisting dictionary 
             gemcodes[gem].append(coords(read.reference_name, read.reference_start))
 
+        #Save read contig as current_chr
+        current_chr = read.reference_name
+
     #Write out all remaining molecules at end of bam
     for gem in gemcodes:
+
         yield molecule(gemcodes[gem][0].chr, min([pos for chr, pos in gemcodes[gem]]), 
                        max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
 
@@ -80,6 +101,7 @@ def main():
 
     #Get gemcode regions
     for bed in get_gemcode_regions(args.ibam, args.dist):
+        
         #Turn molecule object into string
         bed_str = '{0}\t{1}\t{2}\t{3}\t{4}'.format(bed.chr, bed.start, bed.end,
                                                    bed.barcode, bed.readcount)
