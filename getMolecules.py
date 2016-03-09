@@ -19,7 +19,7 @@ def get_gemcode_regions(ibam, dist):
     ----------
     ibam : pysam.AlignmentFile
         Input 10X bam
-    dist
+    dist : int
         Partitioning distance (bp) for separating reads with overlapping
         barcodes into independent fragments
 
@@ -45,13 +45,23 @@ def get_gemcode_regions(ibam, dist):
         #Save 10X barcode for read as gem
         gem = read.get_tag('RX')
         #If barcode has been seen previously and new read is either from different
-        #contig or is colinear but beyond dist, write out old barcode as interval
+        #contig or is colinear but beyond dist, yield old barcode as interval
         #before adding new read to list
-        if gem in gemcodes and ( gemcodes[gem][-1].chr != read.reference_name or read.reference_start-gemcodes[gem][-1].pos < dist ):
-            yield molecule(gemcodes[gem][1].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
-            gemcodes[read.get_tag('RX')] = coords(read.reference_name, read.reference_start)
+        if gem in gemcodes and (gemcodes[gem][-1].chr != read.reference_name or 
+                                read.reference_start - gemcodes[gem][-1].pos > dist):
+
+            yield molecule(gemcodes[gem][1].chr, 
+                           min([pos for chr, pos in gemcodes[gem]]), 
+                           max([pos for chr, pos in gemcodes[gem]]), 
+                           gem, len(gemcodes[gem]))
+
+            gemcodes[gem] = coords(read.reference_name, read.reference_start)
         else:
             #Else just add read to preexisting dictionary 
             gemcodes[gem].append(coords(read.reference_name, read.reference_start))
+
+    #Write out all remaining molecules at end of bam
+    for gem in gemcodes:
+        yield molecule(gemcodes[gem][1].chr, min([pos for chr, pos in gemcodes[gem]]), max([pos for chr, pos in gemcodes[gem]]), gem, len(gemcodes[gem]))
 
 
