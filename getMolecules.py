@@ -63,7 +63,7 @@ def get_gemcode_regions(ibam, dist):
         
         #If barcode has been seen previously and new read is colinear but beyond 
         #dist, yield old barcode as interval before adding new read to list
-        elif gem in gemcodes and read.reference_start - gemcodes[gem][-1].pos > dist):
+        elif gem in gemcodes and read.reference_start - gemcodes[gem][-1].pos > dist:
 
             yield molecule(gemcodes[gem][0].chr, 
                            min([pos for chr, pos in gemcodes[gem]]), 
@@ -101,7 +101,7 @@ def main():
 
     #Get gemcode regions
     for bed in get_gemcode_regions(args.ibam, args.dist):
-        
+
         #Turn molecule object into string
         bed_str = '{0}\t{1}\t{2}\t{3}\t{4}'.format(bed.chr, bed.start, bed.end,
                                                    bed.barcode, bed.readcount)
