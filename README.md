@@ -6,7 +6,7 @@ Command-line utilities for processing and analyzing 10X linked-read WGS data
 All code copyright (c) 2017 Ryan Collins and is distributed under terms of the MIT license.
 
 ## getMolecules.py
-Iterates through a 10X bam file and estimates original molecule lengths and coordinates from colinear reads with matching RX tags (i.e. 10X barcodes). 
+Iterates through a 10X bam file and estimates original molecule lengths and coordinates from colinear reads with matching BX tags (i.e. 10X barcodes). 
 ```
 usage: getMolecules.py [-h] [-d DIST] ibam outfile
 
@@ -23,4 +23,4 @@ optional arguments:
 ```
 **Usage Notes:**  
 1. Input bam file must be coordinate-sorted and indexed.  
-2. "Parititioning distance" (option -d / --dist) is the maximum distance permitted between two colinear reads with matching RX tags before considering them to have arisen from independent molecules.
+2. "Parititioning distance" (option -d / --dist) is the maximum distance permitted between two colinear reads with matching BX tags before considering them to have arisen from independent molecules.
