@@ -1,9 +1,9 @@
 # 10XWGS
 Command-line utilities for processing and analyzing 10X linked-read WGS data
 
-**Contact:** Ryan Collins (rcollins@chgr.mgh.harvard.edu)
+**Contact:** Ryan Collins (rlcollins@g.harvard.edu)
 
-All code copyright (c) 2016 Ryan Collins and is distributed under terms of the MIT license.
+All code copyright (c) 2017 Ryan Collins and is distributed under terms of the MIT license.
 
 ## getMolecules.py
 Iterates through a 10X bam file and estimates original molecule lengths and coordinates from colinear reads with matching RX tags (i.e. 10X barcodes). 
